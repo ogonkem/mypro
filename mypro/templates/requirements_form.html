@@ -1,0 +1,155 @@
+{% load static %}
+<!doctype html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1'>
+        <title>Nwachuku Ogochuku project</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel='stylesheet'>
+        <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+        <link rel="stylesheet" href="{% static 'css/default.css' %}">
+
+    </head>
+    <body oncontextmenu='return false' class='snippet-body'>
+        <div class="container mt-5">
+          <br/>
+          {% include 'includes/alerts.html' %}
+          <br/>
+        <div class="row d-flex justify-content-center align-items-center" style="background-color: white;">
+            <div class="col-8" style="padding-right: calc(var(--bs-gutter-x) * 0);padding-left: calc(var(--bs-gutter-x) * 0);">
+                <form id="regForm" method="POST" action="{% url 'project' %}" enctype="multipart/form-data">
+                  {% csrf_token %}
+                    <h1 id="register">Your Project Requirements</h1>
+
+                    <div class="all-steps" id="all-steps">
+                    <span class="step">1</span>
+                    <span class="step">2</span>
+                    <!-- <span class="step"><i class="fa fa-shopping-bag"></i></span>
+                    <span class="step"><i class="fa fa-car"></i></span>
+                    <span class="step"><i class="fa fa-spotify"></i></span>
+                    <span class="step"><i class="fa fa-mobile-phone"></i></span>  -->
+                  </div>
+                    <div class="tab">
+                        <h6>Choose your product</h6>
+                        {{ form.product }}
+                        <h6>Solution description</h6>
+                        {{ form.solution_description }}
+                        <h6>Target Audience</h6>
+                        {{ form.project_target }}
+                    </div>
+                    <div class="tab">
+                        <h6>Do you have a coding language preference?</h6>
+                        {{ form.code_language_preference }}
+                        <h6>If yes, what would it be?</h6>
+                        {{ form.code_language }}
+                        <h6>Do you hae a map of your software build up?</h6>
+                        {{ form.have_buildups }}
+                        <h6>If yes (please upload it)</h6>
+                        {{ form.buildups }}
+                        <h6>Do you hae a map of your software design elements?</h6>
+                        {{ form.have_design_elements }}
+                        <h6>If yes (please upload it)</h6>
+                        {{ form.design_elements }}
+                    </div>
+                    <!-- <div class="tab">
+                        <h6>What's your Favourite Shopping site?</h6>
+                        <p><input placeholder="Favourite Shopping site" oninput="this.className = ''" name="email"></p>
+                    </div>
+                    <div class="tab">
+                        <h6>What's your Favourite car?</h6>
+                        <p><input placeholder="Favourite car" oninput="this.className = ''" name="uname"></p>
+                    </div>
+                    <div class="tab">
+                        <h6>What's your Favourite Song?</h6>
+                        <p><input placeholder="Favourite Song" oninput="this.className = ''" name="uname"></p>
+                    </div>
+                    <div class="tab">
+                        <h6>What's your Favourite Mobile brand?</h6>
+                        <p><input placeholder="Favourite Mobile Brand" oninput="this.className = ''" name="uname"></p>
+                    </div> -->
+                    <div class="thanks-message text-center" id="text-message"> <img src="https://i.imgur.com/O18mJ1K.png" width="100" class="mb-4">
+                        <h3>Thankyou for your feedback!</h3> <span>Thanks for your valuable information. It helps us to improve our services!</span>
+                    </div>
+                    <div style="overflow:auto;margin-top:15px" id="nextprevious">
+                        <div style="float:right;">
+                          <button type="button" id="prevBtn" onclick="nextPrev(-1)"><i class="fa fa-angle-double-left"></i></button>
+                          <button type="button" id="nextBtn" onclick="nextPrev(1)"><i class="fa fa-angle-double-right"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-4" style="padding-right: calc(var(--bs-gutter-x) * 0);padding-left: calc(var(--bs-gutter-x) * 0);">
+               <img src="{% static 'images/side_pic.png' %}" alt="side pic" height="100%">
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type='text/Javascript'>
+    var currentTab = 0;
+    document.addEventListener("DOMContentLoaded", function(event) {
+        showTab(currentTab);
+    });
+
+    function showTab(n) {
+        var x = document.getElementsByClassName("tab");
+        x[n].style.display = "block";
+
+        if (n == 0) {
+            document.getElementById("prevBtn").style.display = "none";
+        } else {
+            document.getElementById("prevBtn").style.display = "inline";
+        }
+
+        if (n === (x.length - 1)) {
+            document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+        } else {
+            document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+        }
+
+        fixStepIndicator(n)
+    }
+
+    function nextPrev(n) {
+        var x = document.getElementsByClassName("tab");
+        if (n === 1 && !validateForm()) return false;
+        x[currentTab].style.display = "none";
+        currentTab = currentTab + n;
+        if (currentTab >= x.length) {
+            document.getElementById("regForm").submit();
+            document.getElementById("nextprevious").style.display = "none";
+            document.getElementById("all-steps").style.display = "none";
+            document.getElementById("register").style.display = "none";
+            document.getElementById("text-message").style.display = "block";
+        }
+        showTab(currentTab);
+    }
+
+    function validateForm() {
+    var x, y, i, valid = true;
+    x = document.getElementsByClassName("tab");
+    y = x[currentTab].getElementsByClassName("form-control");
+
+    for (i = 0; i < y.length; i++) {
+      if (y[i].value === "" ) {
+        y[i].className +=" invalid" ; valid=false;
+      }
+    }
+
+    if (valid) {
+      document.getElementsByClassName("step")[currentTab].className +=" finish" ;
+    }
+
+    return valid;
+    }
+
+    function fixStepIndicator(n) {
+      var i, x=document.getElementsByClassName("step");
+      for (i=0; i < x.length; i++) {
+        x[i].className=x[i].className.replace(" active", "" );
+      }
+      x[n].className +=" active" ;
+    }
+    </script>
+</body>
+</html>
