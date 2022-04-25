@@ -1,0 +1,2 @@
+username: mypro_admin2
+password: mypro1admin2pwd3
